@@ -1,0 +1,64 @@
+{
+  "name": "behind-bars",
+  "version": "1.0.0",
+  "description": "Abort if the process isn't sandboxed and can access sensitive files",
+  "keywords": [
+    "sandbox",
+    "isolate",
+    "jail",
+    "chroot",
+    "firejail",
+    "bubblewrap",
+    "container"
+  ],
+  "homepage": "https://github.com/dandv/behind-bars#readme",
+  "bugs": {
+    "url": "https://github.com/dandv/behind-bars/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dandv/behind-bars.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Dan Dascalescu",
+    "url": "https://github.com/dandv"
+  },
+  "type": "module",
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.js",
+    "default": "./index.mjs"
+  },
+  "main": "index.js",
+  "files": [
+    "index.ts",
+    "index.mjs",
+    "index.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm *.js *.js.map index.mjs",
+    "lint": "eslint index*.ts",
+    "example": "tsc && node --experimental-specifier-resolution=node example.js",
+    "prepublishOnly:cjs": "tsc index.ts --removeComments",
+    "prepublishOnly:esm": "tsc index.ts -t ES2015 --types node --moduleResolution node && mv index.js index.mjs",
+    "prepublishOnly": "npm run prepublishOnly:esm; npm run prepublishOnly:cjs"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.22",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "eslint": "^7.21.0",
+    "typescript": "^4.2.3"
+  },
+  "comments": {
+    "scripts": {
+      "prepublishOnly:esm": "[TypeScript can't generate .mjs output directly](https://github.com/microsoft/TypeScript/issues/18442) and --outFile doesn't work with ES Modules"
+    },
+    "exports": "[Conditional exports](https://nodejs.org/api/packages.html#packages_conditional_exports) enable TypeScript code transpiled with ES Modules, to use named imports. [TypeScript doesn't directly support .mjs input files](https://github.com/microsoft/TypeScript/issues/27957)."
+  },
+  "dependencies": {
+    "tiny-glob": "^0.2.8"
+  }
+}

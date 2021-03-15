@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",  // output `import`/`export` ES modules
+    "skipLibCheck": true,  // don't look for .ts files in node_modules
+    "moduleResolution": "node",  // to `import glob from 'tiny-glob'`
+    "types": ["node"],  // `process`
+    "sourceMap": true,  // enable debugging
+    "allowSyntheticDefaultImports": true  // to import tiny-glob
+  }
+}
