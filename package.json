@@ -9,7 +9,10 @@
     "chroot",
     "firejail",
     "bubblewrap",
-    "container"
+    "container",
+    "protect",
+    "prevent",
+    "exfiltration"
   ],
   "homepage": "https://github.com/dandv/behind-bars#readme",
   "bugs": {
@@ -41,8 +44,8 @@
     "clean": "rm *.js *.js.map index.mjs",
     "lint": "eslint index*.ts",
     "example": "tsc && node --experimental-specifier-resolution=node example.js",
-    "prepublishOnly:cjs": "tsc index.ts --removeComments",
-    "prepublishOnly:esm": "tsc index.ts -t ES2015 --types node --moduleResolution node && mv index.js index.mjs",
+    "prepublishOnly:cjs": "tsc index.ts --allowSyntheticDefaultImports --removeComments",
+    "prepublishOnly:esm": "tsc index.ts -t es2020 --allowSyntheticDefaultImports --moduleResolution node --module es2020 && mv index.js index.mjs",
     "prepublishOnly": "npm run prepublishOnly:esm; npm run prepublishOnly:cjs"
   },
   "devDependencies": {
