@@ -4,24 +4,28 @@
 
 Does it bug you to think that maybe a dependency of a dependency that your script uses, could [become malicious](https://www.npmjs.com/advisories/1584) and look through your files then phone home anything it wants, as recently seen with crypto wallets in [the event-stream attack](https://www.zdnet.com/article/hacker-backdoors-popular-javascript-library-to-steal-bitcoin-funds/), or [sensitive Linux files](https://arstechnica.com/gadgets/2021/03/more-top-tier-companies-targeted-by-new-type-of-potentially-serious-attack/)? [Open source supply chain attacks](https://link.springer.com/chapter/10.1007/978-3-030-52683-2_2) have been on the rise.
 
-The solution is to run your scripts in a sandboxed environment such as [firejail](https://github.com/netblue30/firejail/), [bubblewrap](https://github.com/containers/bubblewrap), or even Docker or a VM. This module lets you make sure that the sandbox is working as intended. Note that the module doesn't provide sandboxing capabilities itself; use a dedicated tool for that, such as the ones mentioned earlier.
+The solution is to run your scripts in a sandboxed environment such as [firejail](https://github.com/netblue30/firejail/), [bubblewrap](https://github.com/containers/bubblewrap), or a VM (Docker is a containerization solution, [not aimed at security](https://security.stackexchange.com/questions/107850/docker-as-a-sandbox-for-untrusted-code)). This module lets you make sure that the sandbox is working as intended. Note that the module doesn't provide sandboxing capabilities itself; use a dedicated tool for that, such as the ones mentioned earlier.
 
 
 # Usage
 
-Simply add `import 'behind-bars';` as the first line of your script, and rest assured the script will exit immediately if it can access sensitive files or directories (browser profiles, cryptocurrency wallets, `~/*_history` etc.).
+Simply add `import 'behind-bars';` as the first line of your script, and rest assured the script will exit immediately if it can access sensitive files or directories (browser profiles, cryptocurrency wallets, `~/*_history` etc.) on Linux/MacOS systems. (PRs welcome for Windows paths)
 
 ## Config file
 
-You can optionally ensure there's no network access either, or specify custom files/directories to check against, by creating a configuration file `behind-bars.config.js` with the following syntax:
+You can optionally ensure there's no network access either, or specify custom files/directories to check against, by creating a configuration file `behind-bars.json` with the following syntax:
 
-```js
-export const deny = {
-  urls: ['https://google.com'],  // exit if any of these URLs is accessible
-  paths: ['~/.conf*'],  // exit if any of these paths can be read; overrides the default paths
-  pathsExtra: ['~/.ssh'],  // additional paths to make sure aren't readable
+```json
+{
+  "paths": ["~/.conf*"],
+  "pathsExtra": ["~/.ssh"],
+  "urls": ["https://google.com"]
 }
 ```
+
+* `paths` - exit if any of these paths can be read; overrides the default paths
+* `pathsExtra` - check these paths aren't readable in addition to the default ones
+* `urls` - exit if any of these URLs is accessible
 
 ## Notes:
 
@@ -61,6 +65,7 @@ import 'behind-bars';
 
 * 1 - one of the checks failed, i.e. the process was able to access a URL or path
 * 2 - incorrect usage, e.g. specifying both `paths` and `pathsExtra` in the configuration file
+
 
 # Author
 

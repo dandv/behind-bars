@@ -1,7 +1,7 @@
 {
   "name": "behind-bars",
-  "version": "1.0.0",
-  "description": "Abort if the process isn't sandboxed and can access sensitive files",
+  "version": "2.0.0",
+  "description": "Abort if the process isn't sandboxed as intended and can access sensitive files",
   "keywords": [
     "sandbox",
     "isolate",
@@ -43,10 +43,14 @@
     "build": "tsc",
     "clean": "rm *.js *.js.map index.mjs",
     "lint": "eslint index*.ts",
-    "example": "tsc && node --experimental-specifier-resolution=node example.js",
+    "example": "tsc && (cd example && node --experimental-specifier-resolution=node example.js; cd ..)",
     "prepublishOnly:cjs": "tsc index.ts --allowSyntheticDefaultImports --removeComments",
     "prepublishOnly:esm": "tsc index.ts -t es2020 --allowSyntheticDefaultImports --moduleResolution node --module es2020 && mv index.js index.mjs",
     "prepublishOnly": "npm run prepublishOnly:esm; npm run prepublishOnly:cjs"
+  },
+  "dependencies": {
+    "glob": "^7.1.6",
+    "sync-request": "^6.1.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.22",
@@ -60,8 +64,5 @@
       "prepublishOnly:esm": "[TypeScript can't generate .mjs output directly](https://github.com/microsoft/TypeScript/issues/18442) and --outFile doesn't work with ES Modules"
     },
     "exports": "[Conditional exports](https://nodejs.org/api/packages.html#packages_conditional_exports) enable TypeScript code transpiled with ES Modules, to use named imports. [TypeScript doesn't directly support .mjs input files](https://github.com/microsoft/TypeScript/issues/27957)."
-  },
-  "dependencies": {
-    "tiny-glob": "^0.2.8"
   }
 }
